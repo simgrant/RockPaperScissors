@@ -7,6 +7,23 @@
 
 import SwiftUI
 
+enum Emoji {
+    case rock
+    case paper
+    case scissors
+    
+    var emoji: String {
+        switch self {
+        case .rock:
+            return "🪨"
+        case .paper:
+            return "📃"
+        case .scissors:
+            return "✂️"
+        }
+    }
+}
+
 struct ContentView: View {
     // store three possible moves
     var moves = ["Rock", "Paper", "Scissors"]
@@ -37,16 +54,120 @@ struct ContentView: View {
             score -= 1
         }
         shouldWin.toggle()
-    }
-    
-    
-    var body: some View {
-        VStack {
-            
+        
+        if score < 0 {
+            score = 0
         }
     }
-}
-
-#Preview {
-    ContentView()
-}
+    
+    func generateMsg() -> String {
+        return (shouldWin ? "You're going to win!" : "You're going to lose!")
+    }
+    
+    //TODO: Figure this out
+    func display(_ emoji: String) -> Emoji?  {
+        switch emoji.lowercased() {
+        case "rock":
+            return .rock
+        case "paper":
+            return .paper
+        case "scissors":
+            return .scissors
+        default:
+            return nil
+        }
+    }
+    
+//TODO: Add opponent score
+//    TODO: Add alert to start game & keep track of win/losses
+    
+    var body: some View {
+        NavigationView {
+                VStack {
+                    
+                    HStack {
+                        
+                        //game prediction (shouldWin)
+                        Text("🔮 Prediction:")
+                            .font(.system(size: 15))
+                        
+                        Text(generateMsg())
+                            .font(.system(size: 18))
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .padding()
+                    
+                    //                    Spacer()
+                    
+                    //                Player Choices
+                    Text("👇 Make your move 👇")
+                        .font(.system(size: 25))
+                        .padding()
+                    VStack {
+                        Button {
+                            playerMove = "Rock"
+                            generateMove()
+                            playerResult()
+                        } label: {
+                            Text("🪨")
+                                .font(.system(size: 50))
+                            
+                        }
+                        .padding()
+                        .border(Color.gray, width: 2)
+                        .cornerRadius(7)
+                        
+                        
+                        Button {
+                            playerMove = "Paper"
+                            generateMove()
+                            playerResult()
+                        } label: {
+                            Text("📃")
+                                .font(.system(size: 50))
+                        }
+                        .padding()
+                        .border(Color.gray, width: 2)
+                        .cornerRadius(7)
+                        
+                        
+                        Button {
+                            playerMove = "Scissors"
+                            generateMove()
+                            playerResult()
+                        } label: {
+                            Text("✂️")
+                                .font(.system(size: 50))
+                        }
+                        .padding()
+                        .border(Color.gray, width: 2)
+                        .cornerRadius(7)
+                        
+                    }
+                    
+                                        Spacer()
+                                        Text("You chose: \(playerMove)")
+                    
+                                        //                App choice
+                                        Text("Your opponent chose: \(appMove)")
+                    
+                    Spacer()
+                    
+                    //player score
+                    Text("Score: \(score)")
+                        .font(.system(size: 25))
+                }
+                .navigationTitle("Rock, Paper, Scissors!")
+                .navigationBarTitleDisplayMode(.automatic)
+                .padding()
+            }
+            .padding()
+        
+        }
+    
+    }
+    
+    
+    #Preview {
+        ContentView()
+    }
